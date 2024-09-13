@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control Panel</title>
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #d0e1f9; /* Gris-azul claro */
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #005b96; /* Barra azul */
+            padding: 10px;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .header img {
+            position: absolute;
+            left: 10px;
+            top: 5px;
+            width: 50px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .form-advance {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        input[type="submit"] {
+            background-color: #ff4c4c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #e60000; /* Rojo oscuro */
+        }
+
+        input[type="submit"]:active {
+            transform: scale(0.98);
+        }
+
+        .sensor-data {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .sensor-data h2 {
+            margin: 10px;
+        }
+    </style>
+    <script>
+        function fetchSensorData() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', 'fetch_sensor_data.php', true);
+            xhr.onload = function() {
+                if (this.status === 200) {
+                    const data = JSON.parse(this.responseText);
+                    document.getElementById('temperature').innerText = data.temperature + ' °C';
+                    document.getElementById('humidity').innerText = data.humidity + ' %';
+                }
+            };
+            xhr.send();
+        }
+
+        setInterval(fetchSensorData, 5000); // Actualiza cada 5 segundos
+    </script>
+</head>
+<body>
+    <div class="header">
+        <img src="richardatomiccompany.png" alt="Logo">
+        <h1>Richard & Atomic Company</h1>
+    </div>
+
+    <div class="button-container">
+        <div class="form-advance">
+            <form method="post">
+                <input type="submit" name="avanzar" value="Avanzar">
+            </form>
+        </div>
+        <form method="post">
+            <input type="submit" name="izquierda" value="Izquierda">
+            <input type="submit" name="ir_atras" value="Ir hacia atrás">
+            <input type="submit" name="derecha" value="Derecha">
+
+            <input type="submit" name="grip_eje_izquierda" value="Grip Eje Izquierda">
+            <input type="submit" name="grip_eje_derecha" value="Grip Eje Derecha">
+
+            <input type="submit" name="grip_horizontal_abajo" value="Grip Horiz. Abajo">
+            <input type="submit" name="grip_horizontal_arriba" value="Grip Horiz. Arriba">
+
+            <input type="submit" name="grip_cerrar" value="Grip Cerrar">
+            <input type="submit" name="grip_abrir" value="Grip Abrir">
+        </form>
+    </div>
+
+    <div class="sensor-data">
+        <h2>Temperatura: <span id="temperature"><?php echo $temperature; ?></span> °C</h2>
+        <h2>Humedad: <span id="humidity"><?php echo $humidity; ?></span> %</h2>
+    </div>
+</body>
+</html>
